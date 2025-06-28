@@ -2,11 +2,11 @@ services:
   api:
     image: ghcr.io/steel-dev/steel-browser-api:latest
     ports:
-      - "3000:3000"
-      - "9223:9223"
+      - "${API_PORT:-3000}:3000"
+      - "${CDP_PORT:-9223}:9223"
     environment:
-      - DOMAIN=${DOMAIN:-localhost:3000}
-      - CDP_DOMAIN=${CDP_DOMAIN:-localhost:9223}
+      - DOMAIN=${DOMAIN:-localhost:${API_PORT:-3000}}
+      - CDP_DOMAIN=${CDP_DOMAIN:-localhost:${CDP_PORT:-9223}}
     volumes:
       - ./.cache:/app/.cache
     networks:
@@ -15,7 +15,7 @@ services:
   ui:
     image: ghcr.io/steel-dev/steel-browser-ui:latest
     ports:
-      - "5173:80"
+      - "${UI_PORT:-5173}:80"
     environment:
       - API_URL=${API_URL:-http://api:3000}
     depends_on:
